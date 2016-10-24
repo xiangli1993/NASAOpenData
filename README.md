@@ -4,9 +4,13 @@ This is a project of Boston University EC601.
 
 ##Group Member
 Xiang Li
+
 Prerana Haridoss
+
 Taifu Chen
-Alex
+
+Chenxi Zhang
+
 ##Getting Started
 
 To use the source files, you will need to have npm installed globally along with Gulp.js. To start:
