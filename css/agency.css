@@ -147,7 +147,7 @@ fieldset[disabled] .btn-xl.active {
   background-color: white;
 }
 .navbar-custom {
-  background-color: #222222;
+  background-color: #2a2a2c;
   border-color: transparent;
 }
 .navbar-custom .navbar-brand {
@@ -189,12 +189,12 @@ fieldset[disabled] .btn-xl.active {
 }
 .navbar-custom .navbar-nav > .active > a {
   border-radius: 0;
-  color: white;
+  color: #2a2a2c;
   background-color: #fed136;
 }
 .navbar-custom .navbar-nav > .active > a:hover,
 .navbar-custom .navbar-nav > .active > a:focus {
-  color: white;
+  color: #2a2a2c;
   background-color: #fec503;
 }
 @media (min-width: 768px) {
@@ -301,6 +301,11 @@ section h3.section-subheading {
 .service-heading {
   margin: 15px 0;
   text-transform: none;
+}
+.map {
+  margin: auto;
+  width: 80%;
+  height: 600px;
 }
 .team-member {
   text-align: center;
