@@ -138,6 +138,7 @@
         <div id="map" style="width:80%; height: 600px; margin:auto"></div>
         <script>
             var map;
+            var minZoomLevel = 2;
             function initMap() {
                 map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 2,
@@ -148,6 +149,9 @@
 
                 google.maps.event.addListener(map, 'center_changed', function () {
                     checkBounds(map);
+                });
+                google.maps.event.addListener(map, 'zoom_changed', function() {
+                    if (map.getZoom() < minZoomLevel) map.setZoom(minZoomLevel);
                 });
 
                 // Create a <script> tag and set the USGS URL as the source.
