@@ -135,7 +135,7 @@
         </div>
     </div>
     <div class="row">
-        <div id="map" class="map"></div>
+        <div id="map" style="width:80%; height: 600px; margin:auto"></div>
         <script>
             var map;
             function initMap() {
@@ -143,6 +143,11 @@
                     zoom: 2,
                     center: {lat: -33.865427, lng: 151.196123},
                     mapTypeId: 'terrain'
+                });
+
+
+                google.maps.event.addListener(map, 'center_changed', function () {
+                    checkBounds(map);
                 });
 
                 // Create a <script> tag and set the USGS URL as the source.
@@ -174,6 +179,31 @@
 
             function eqfeed_callback(results) {
                 map.data.addGeoJson(results);
+            }
+
+            function checkBounds(map) {
+                var latNorth = map.getBounds().getNorthEast().lat();
+                var latSouth = map.getBounds().getSouthWest().lat();
+                var newLat;
+
+                if (latNorth < 85 && latSouth > -85)     /* in both side -> it's ok */
+                    return;
+                else {
+                    if (latNorth > 85 && latSouth < -85)   /* out both side -> it's ok */
+                        return;
+                    else {
+                        if (latNorth > 85)
+                            newLat = map.getCenter().lat() - (latNorth - 85);
+                        /* too north, centering */
+                        if (latSouth < -85)
+                            newLat = map.getCenter().lat() - (latSouth + 85);
+                        /* too south, centering */
+                    }
+                }
+                if (newLat) {
+                    var newCenter = new google.maps.LatLng(newLat, map.getCenter().lng());
+                    map.setCenter(newCenter);
+                }
             }
         </script>
         <script async defer
