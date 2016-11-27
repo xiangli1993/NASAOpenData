@@ -135,16 +135,28 @@
         </div>
     </div>
     <div class="row">
+        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
         <div id="map" style="width:80%; height: 600px; margin:auto"></div>
+        <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQva4w0QussxVkicCvaU1M_-5kHFOwp54&libraries=places"></script>-->
+        <!--async defer-->
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQva4w0QussxVkicCvaU1M_-5kHFOwp54&libraries=places&callback=initMap">
+        </script>
+    </div>
         <script>
             var map;
             var minZoomLevel = 2;
             function initMap() {
+                var markers = [];
                 map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 2,
                     center: {lat: -33.865427, lng: 151.196123},
                     mapTypeId: 'terrain'
                 });
+                var defaultBounds = new google.maps.LatLngBounds(
+                        new google.maps.LatLng(-33.8902, 151.1759),
+                        new google.maps.LatLng(-33.8474, 151.2631));
+                map.fitBounds(defaultBounds);
 
 
                 google.maps.event.addListener(map, 'center_changed', function () {
@@ -154,36 +166,47 @@
                     if (map.getZoom() < minZoomLevel) map.setZoom(minZoomLevel);
                 });
 
-                // Create a <script> tag and set the USGS URL as the source.
-                var script = document.createElement('script');
+                /*start search box*/
+                // Create the search box and link it to the UI element.
+                var input = document.getElementById('pac-input');
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-                // This example uses a local copy of the GeoJSON stored at
-                // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-                script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-                document.getElementsByTagName('head')[0].appendChild(script);
+                var searchBox = new google.maps.places.SearchBox(input);
+                google.maps.event.addListener(searchBox, 'places_changed', function () {
 
-                map.data.setStyle(function (feature) {
-                    var magnitude = feature.getProperty('mag');
-                    return {
-                        icon: getCircle(magnitude)
-                    };
+                    var places = searchBox.getPlaces();
+
+                    for (var i = 0; marker = markers[i]; i++) {
+                        marker.setMap(null);
+                    }
+
+                    markers = [];
+                    var bounds = new google.maps.LatLngBounds();
+
+                    var place;
+                    for (i = 0; place = places[i]; i++) {
+                        var icon = {
+                            url: place.icon,
+                            size: new google.maps.Size(71, 71),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(17, 34),
+                            scaledSize: new google.maps.Size(25, 25)
+                        };
+                        // Create a marker for each place.
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            icon:icon,
+                            title: place.name,
+                            position: place.geometry.location
+                        });
+
+                        markers.push(marker);
+
+                        bounds.extend(place.geometry.location);
+                    }
+
+                    map.fitBounds(bounds);
                 });
-            }
-
-            function getCircle(magnitude) {
-                return {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    fillColor: 'red',
-                    fillOpacity: .2,
-                    scale: Math.pow(2, magnitude) / 2,
-                    strokeColor: 'white',
-                    strokeWeight: .5
-                };
-            }
-
-            function eqfeed_callback(results) {
-                map.data.addGeoJson(results);
-            }
 
             function checkBounds(map) {
                 var latNorth = map.getBounds().getNorthEast().lat();
@@ -208,12 +231,8 @@
                     var newCenter = new google.maps.LatLng(newLat, map.getCenter().lng());
                     map.setCenter(newCenter);
                 }
-            }
+            }}
         </script>
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQva4w0QussxVkicCvaU1M_-5kHFOwp54&callback=initMap">
-        </script>
-    </div>
 </section>
 
 <!-- Team Section -->
