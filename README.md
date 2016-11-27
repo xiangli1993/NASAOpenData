@@ -1,7 +1,8 @@
 #NASA Open Data Project - Safe Trip
 
 This is a project of Boston University EC601.
-
+![Title](/img/screenshot/Title.png)
+![Map](/img/screenshot/Map.png)
 ##Group Member
 Xiang Li
 
