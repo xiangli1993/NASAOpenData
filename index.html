@@ -139,9 +139,6 @@
         <div id="map" style="width:80%; height: 600px; margin:auto"></div>
         <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQva4w0QussxVkicCvaU1M_-5kHFOwp54&libraries=places"></script>-->
         <!--async defer-->
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQva4w0QussxVkicCvaU1M_-5kHFOwp54&libraries=places&callback=initMap">
-        </script>
     </div>
         <script>
             var map;
@@ -150,12 +147,12 @@
                 var markers = [];
                 map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 2,
-                    center: {lat: -33.865427, lng: 151.196123},
+                    center: {lat: 42.3600825, lng: -71.0588801},//42.3600825, -71.0588801 // -33.865427, lng: 151.196123
                     mapTypeId: 'terrain'
                 });
                 var defaultBounds = new google.maps.LatLngBounds(
-                        new google.maps.LatLng(-33.8902, 151.1759),
-                        new google.maps.LatLng(-33.8474, 151.2631));
+                        new google.maps.LatLng(42.3900825, -71.0988801), //42.3900825, -71.0988801//-33.8902, 151.1759
+                        new google.maps.LatLng(42.3300825, -71.0188801));//42.3300825, -71.0188801//-33.8474, 151.2631
                 map.fitBounds(defaultBounds);
 
 
@@ -203,8 +200,11 @@
                         markers.push(marker);
 
                         bounds.extend(place.geometry.location);
+                        var lat = place.geometry.location.lat();
+                        var lng = place.geometry.location.lng();
+                        console.log(lat);
+                        console.log(lng);
                     }
-
                     map.fitBounds(bounds);
                 });
 
@@ -233,6 +233,9 @@
                 }
             }}
         </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQva4w0QussxVkicCvaU1M_-5kHFOwp54&libraries=places&callback=initMap">
+    </script>
 </section>
 
 <!-- Team Section -->
